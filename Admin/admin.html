@@ -1,0 +1,228 @@
+<!-- At the top of admin.php -->
+<button type="button" class="adminBtn">
+  <a href="logout.php" class="adminlogout bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 w-full">Logout</a>
+</button>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Seat Manager</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, select, button { margin: 5px; padding: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
+    .available { background-color: #b8fbb8; }
+    .booked { background-color: #ffb3b3; }
+    .adminBtn{
+    background-color: red;
+    border-radius: 4px;
+    border: none;
+      }
+
+      .adminlogout
+      {
+          text-decoration: none;
+          color: white;
+      }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel - Manage Seats</h2>
+ 
+  <label>Bus ID: <input type="text" id="busId" value="BUS001"></label>
+  <label>Seat #: <input type="number" id="seatNumber"></label>
+  <label>Status:
+    <select id="seatStatus">
+      <option value="available">Available</option>
+      <option value="booked">Booked</option>
+    </select>
+  </label>
+  <button onclick="createSeat()">Add Seat</button>
+  <button onclick="updateSeat()">Update Seat</button>
+
+  <h3>Seat List</h3>
+  <table>
+    <thead>
+      <tr><th>Seat #</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody id="seatTable"></tbody>
+  </table>
+
+  <h2>Payment Records</h2>
+  <table id="paymentsTable" border="1" style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Seat Number</th>
+        <th>Full Name</th>
+        <th>Phone</th>
+        <th>Payment ID</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="paymentTable"></tbody>
+  </table>
+
+
+  <script>
+    async function fetchSeats() {
+      const busId = document.getElementById('busId').value;
+      const res = await fetch(`seats.php?action=get&bus_id=${busId}`);
+      const data = await res.json();
+      const seatTable = document.getElementById('seatTable');
+      seatTable.innerHTML = data.map(seat => `
+        <tr class="${seat.status}">
+          <td>${seat.seat_number}</td>
+          <td>${seat.status}</td>
+          <td>
+            <button onclick="loadSeat(${seat.seat_number}, '${seat.status}')">Edit</button>
+            <button onclick="deleteSeat(${seat.seat_number})">Delete</button>
+          </td>
+        </tr>`).join('');
+    }
+    function newfetchPayments() {
+  const busId = document.getElementById('busId').value;
+
+  fetch(`fetchPayments.php?bus_id=${busId}`)
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.querySelector('#paymentsTable tbody');
+      tbody.innerHTML = ''; // Clear old rows
+
+      data.forEach(payment => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td contenteditable="true">${payment.seat_number}</td>
+          <td contenteditable="true">${payment.fullname}</td>
+          <td contenteditable="true">${payment.phone}</td>
+          <td>${payment.razorpay_payment_id}</td>
+          <td>${payment.from_location}</td>
+          <td>${payment.to_location}</td>
+          <td>
+            <button onclick="newupdatePayment(this)">Save</button>
+            <button onclick="newdeletePayment('${payment.razorpay_payment_id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    });
+}
+
+    function loadSeat(seatNum, status) {
+      document.getElementById('seatNumber').value = seatNum;
+      document.getElementById('seatStatus').value = status;
+    }
+
+    async function createSeat() {
+      const busId = document.getElementById('busId').value;
+      const seatNumber = document.getElementById('seatNumber').value;
+      const status = document.getElementById('seatStatus').value;
+
+      await fetch('seats.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `action=create&bus_id=${busId}&seat_number=${seatNumber}&status=${status}`
+      });
+      fetchSeats();
+    }
+
+    async function updateSeat() {
+      const busId = document.getElementById('busId').value;
+      const seatNumber = document.getElementById('seatNumber').value;
+      const status = document.getElementById('seatStatus').value;
+
+      await fetch('seats.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `action=update&bus_id=${busId}&seat_number=${seatNumber}&status=${status}`
+      });
+      fetchSeats();
+    }
+
+    async function deleteSeat(seatNumber) {
+      const busId = document.getElementById('busId').value;
+      await fetch('seats.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `action=delete&bus_id=${busId}&seat_number=${seatNumber}`
+      });
+      fetchSeats();
+    }
+    fetchSeats();
+
+    setInterval(fetchSeats, 1000);
+
+  </script>
+  <script>
+    function newfetchPayments() {
+      fetch('getAllPayments.php')
+        .then(response => response.json())
+        .then(data => {
+          const tbody = document.querySelector('#paymentsTable tbody');
+          tbody.innerHTML = ''; // Clear existing rows
+    
+          data.forEach(payment => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td contenteditable="true">${payment.seat_number}</td>
+              <td contenteditable="true">${payment.fullname}</td>
+              <td contenteditable="true">${payment.phone}</td>
+              <td>${payment.razorpay_payment_id}</td>
+              <td>${payment.from_location}</td>
+              <td>${payment.to_location}</td>
+              <td>
+                <button onclick="newupdatePayment(this)">Save</button>
+                <button onclick="newdeletePayment('${payment.razorpay_payment_id}')">Delete</button>
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+        });
+    }
+    
+    function newupdatePayment(button) {
+      const row = button.closest('tr');
+      const cells = row.querySelectorAll('td');
+      const data = {
+        seat_number: cells[0].innerText,
+        fullname: cells[1].innerText,
+        phone: cells[2].innerText,
+        razorpay_payment_id: cells[3].innerText
+      };
+    
+      fetch('updatePayment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => {
+        alert(response.message);
+      });
+    }
+    
+    function newdeletePayment(paymentId) {
+      if (!confirm("Are you sure you want to delete this payment?")) return;
+    
+      fetch('deletePayment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ razorpay_payment_id: paymentId })
+      })
+      .then(res => res.json())
+      .then(response => {
+        alert(response.message);
+        newfetchPayments(); // Refresh table
+      });
+    }
+    
+    newfetchPayments();
+    setInterval(newfetchPayments, 1000);
+    </script>
+    
+</body>
+</html>

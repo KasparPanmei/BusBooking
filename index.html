@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bus Ticket Booking</title>
+    <link rel="shortcut icon" href="./Icons/bus.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="styles/style.css" type="text/css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar is-transparent">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="./index.html">
+          <img src="./Icons/bus.png" alt="">
+        </a>
+        <div class="navbar-burger js-burger" data-target="navbarExampleTransparentExample">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    
+      <div id="navbarExampleTransparentExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item is-active" href="#"> Home </a>
+          <a class="navbar-item" href="#"> Tickets </a>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link" href="#"> Services </a>
+            <div class="navbar-dropdown is-active">
+              <a class="navbar-item is-selected" href="#"> Bus Booking </a>
+              <a class="navbar-item" href="#"> Bike Rental </a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="#"> Car Rental </a>
+            </div>
+          </div>
+          <a class="navbar-item " href="#"> Contact </a>
+        </div>
+    
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="field is-grouped">
+              <p class="control">
+                <a class="button is-primary" href="./Admin/adminLogin.php">
+                  <span class="icon">
+                    <i class="fas fa-download"></i>
+                  </span>
+                  <span>Login</span>
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+      <!-- Hero Section -->
+      <section id="Hero">
+        <div class="welcomeContent">
+            <p>Get Your Bus Tickets Here</p>
+            <h1>Find the Best Bus !</h1>
+        </div>
+        <div class="searchBar">
+            <div class="bg-white p-4 rounded-2xl shadow-md w-full max-w-4xl">
+                <form onclick="searchBus(event)" class="grid grid-cols-1 md:grid-cols-5 gap-3 items-center relative">
+                  
+                  <!-- From Input -->
+                  <div class="relative">
+                    <div class="flex items-center bg-gray-100 px-4 py-2 rounded-full">
+                      <input id="from" type="text" placeholder="From..." value="imphal" class="bg-transparent focus:outline-none w-full text-sm" autocomplete="off" />
+                    </div>
+                    <ul id="fromSuggestions" class="suggestions bg-white rounded shadow mt-1 hidden max-h-40 overflow-auto text-sm"></ul>
+                  </div>
+            
+                  <!-- Switch Icon -->
+                  <div class="hidden md:flex justify-center">
+                    <div class="bg-red-500 text-white p-2 rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6m0 0a2 2 0 01-2 2h-2m0 0V8m-4 0H9a2 2 0 00-2 2v6m0 0a2 2 0 002 2h4m0 0V8" />
+                      </svg>
+                    </div>
+                  </div>
+                  <!-- To Input -->
+                  <div class="relative">
+                    <div class="flex items-center bg-gray-100 px-4 py-2 rounded-full">
+                      <input id="to" type="text" placeholder="To..." class="bg-transparent focus:outline-none w-full text-sm" autocomplete="off" />
+                    </div>
+                    <ul id="toSuggestions" class="suggestions bg-white rounded shadow mt-1 hidden max-h-40 overflow-auto text-sm"></ul>
+                  </div>
+            
+                  <!-- Date Picker -->
+                  <div class="flex items-center bg-gray-100 px-4 py-2 rounded-full">
+                    <input type="date" class="bg-transparent focus:outline-none text-sm text-gray-500 w-full" />
+                  </div>
+                  <!-- Search Button -->
+                  <div>
+                    <button type="button" id="searchButton" class="bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 w-full">
+                      🔍
+                    </button>
+                  </div>
+                </form>
+                <!-- Bus Results -->
+                  <div id="busResults" style='color:black; font-weight:bold' class="mt-6 space-y-6">
+                  </div>
+              </div>
+        </div>
+    </section>
+
+    <!-- payment -->
+    <div class="background">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <section class="section" id="ticket">
+        <div class="container">
+          <h1 class="title has-text-centered" style="color: black;font-size: 40px;">Book Your Ticket 🚌 </h1>
+      
+          <form id="paymentForm" class="box bg-white p-4 rounded-2xl shadow-md w-full max-w-4xl" style="max-width: 500px; margin: 0 auto; color: black;">
+            <div class="field">
+              <label class="label">From</label>
+              <div class="control">
+                <input autocomplet="off" class="input" type="text" id="fromLocation" placeholder="Departure location" value="imphal"  required />
+              </div>
+            </div>
+      
+            <div class="field">
+              <label class="label">To</label>
+              <div class="control">
+                <input autocomplet="off" class="input" type="text" id="toLocation" placeholder="Destination location" required />
+              </div>
+            </div>
+      
+            <div class="field">
+              <label class="label">Seat Number</label>
+              <div class="control">
+                <input autocomplet="off" class="input" type="text" id="seat_number" placeholder="Seat number" required />
+              </div>
+            </div>
+      
+            <div class="field">
+              <label class="label">Full Name</label>
+              <div class="control">
+                <input autocomplet="off" class="input" type="text" id="name" placeholder="Your full name" required />
+              </div>
+            </div>
+      
+            <div class="field">
+              <label class="label">Phone Number</label>
+              <div class="control">
+                <input autocomplet="off" class="input" type="tel" id="phone" placeholder="Phone number" required />
+              </div>
+            </div>
+      
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control">
+                <input autocomplet="off" class="input" type="email" id="email" placeholder="Email address" required />
+              </div>
+            </div>
+      
+            <div class="field is-grouped is-justify-content-center">
+              <div class="control">
+                <button class="button is-primary" type="submit">Proceed to Payment</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+   </div>
+    
+</body>
+<script src="./main.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  (function(){
+    emailjs.init("y8FfvO415AWE9k4it"); // Replace with your public key
+  })();
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+// Get all "navbar-burger" elements
+const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+// Add a click event on each of them
+$navbarBurgers.forEach( el => {
+  el.addEventListener('click', () => {
+
+    // Get the target from the "data-target" attribute
+    const target = el.dataset.target;
+    const $target = document.getElementById(target);
+
+    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+    el.classList.toggle('is-active');
+    $target.classList.toggle('is-active');
+
+  });
+});
+
+});
+</script>
+</html>
