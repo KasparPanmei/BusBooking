@@ -11,9 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 
 
 </head>
@@ -35,7 +34,7 @@
       <div id="navbarExampleTransparentExample" class="navbar-menu">
         <div class="navbar-start">
           <a class="navbar-item is-active" href="#"> Home </a>
-          <a class="navbar-item" href="#"> Tickets </a>
+          <a class="navbar-item" href="#tickets"> Tickets </a>
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link" href="#"> Services </a>
             <div class="navbar-dropdown is-active">
@@ -52,7 +51,7 @@
           <div class="navbar-item">
             <div class="field is-grouped">
               <p class="control">
-                <a class="button is-primary" href="./Admin/adminLogin.php">
+                <a class="button is-primary" href="./Admin/adminLogin.php" target="_blank" norelopenner="">
                   <span class="icon">
                     <i class="fas fa-download"></i>
                   </span>
@@ -144,17 +143,30 @@
           <h1 class="title has-text-centered" style="color: black;font-size: 40px;">Book Your Ticket 🚌 </h1>
       
           <form id="paymentForm" class="box bg-white p-4 rounded-2xl shadow-md w-full max-w-4xl" style="max-width: 500px; margin: 0 auto; color: black;">
+            <!-- <div class="field">
+              <label class="label">Select Bus</label>
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <select id="bus_id" required>
+                    <option value="">Choose Bus</option>
+                    <option value="">GAISUAKNGAM</option>
+                    <option value="">SUAIHIAMGAN</option>
+                  </select>
+                </div>
+              </div>
+            </div> -->
+            
             <div class="field">
               <label class="label">From</label>
               <div class="control">
-                <input autocomplet="off" class="input" type="text" id="fromLocation" placeholder="Departure location" value="imphal"  required />
+                <input autocomplet="off" class="input" type="text" ng-bind="from" readonly id="fromLocation" placeholder="Departure location" required />
               </div>
             </div>
       
             <div class="field">
               <label class="label">To</label>
               <div class="control">
-                <input autocomplet="off" class="input" type="text" id="toLocation" placeholder="Destination location" required />
+                <input autocomplet="off" readonly class="input" type="text" id="toLocation" placeholder="Destination location" value="tamenglong" required />
               </div>
             </div>
       
@@ -199,10 +211,16 @@
 </body>
 <script src="./main.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
-<script>
-  (function(){
-    emailjs.init("y8FfvO415AWE9k4it"); // Replace with your public key
-  })();
+
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "y8FfvO415AWE9k4it",
+      });
+   })();
 </script>
 
 <script>

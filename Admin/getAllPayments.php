@@ -9,7 +9,7 @@ if ($conn->connect_error) {
     exit();
 }
 
-$query = "SELECT seat_number, fullname, phone, razorpay_payment_id, from_location, to_location FROM payments ORDER BY seat_number";
+$query = "SELECT seat_number, fullname, phone, razorpay_payment_id, from_location, to_location, created_at FROM payments ORDER BY seat_number";
 $result = $conn->query($query);
 
 $payments = [];

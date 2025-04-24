@@ -1,1 +1,1 @@
-{"razorpay_payment_id":"pay_QKzLkxBoUbr15G","name":"Kaspar Panmei","phone":"07982239573","email":"kasparpanmei02@gmail.com","seat":"2","from":"tamenglong","to":"imphal","amount":500,"bus_id":"BUS001"}
+{"razorpay_payment_id":"pay_QMzNOgGKPRD9AP","name":"Kaspar Panmei","phone":"07982239573","email":"kasparpanmei02@gmail.com","seat":"1","from":"Tamenglong","to":"Imphal","amount":500}

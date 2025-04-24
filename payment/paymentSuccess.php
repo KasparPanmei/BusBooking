@@ -1,53 +1,60 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 header("Content-Type: application/json");
-$conn = new mysqli("localhost", "root", "", "finalproject"); // replace with your DB name
 
+$conn = new mysqli("localhost", "root", "", "finalproject");
 if ($conn->connect_error) {
     http_response_code(500);
-    echo json_encode(["message" => "Database connection failed", "error" => $conn->connect_error]);
+    echo json_encode(["error" => "Database connection failed: " . $conn->connect_error]);
     exit();
 }
 
 $data = json_decode(file_get_contents("php://input"), true);
-file_put_contents("log.txt", json_encode($data));
+file_put_contents("debug.txt", print_r($data, true)); // Log input
 
-
-// Extract data safely
-$razorpay_payment_id = $data["razorpay_payment_id"] ?? '';
-$fullname = $data["name"] ?? '';
+$razorpay_id = $data["razorpay_payment_id"] ?? '';
+$name = $data["name"] ?? '';
 $phone = $data["phone"] ?? '';
 $email = $data["email"] ?? '';
 $seat = $data["seat"] ?? '';
 $from = $data["from"] ?? '';
 $to = $data["to"] ?? '';
 $amount = $data["amount"] ?? 0;
-$bus_id = $data["bus_id"] ?? '';
+$bus_id = $data["busId"] ?? ''; // 🔥 NOTE: Correct key name
 
-// Prepare query
-$stmt = $conn->prepare("INSERT INTO payments (razorpay_payment_id, fullname, phone, email, seat_number, from_location, to_location, amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-if (!$stmt) {
-    http_response_code(500);
-    echo json_encode(["message" => "Prepare failed", "error" => $conn->error]);
+// ✅ Check seat availability again before inserting
+$check = $conn->prepare("SELECT * FROM payments WHERE seat_number = ? AND bus_id = ? AND from_location = ? AND to_location = ?");
+if (!$check) {
+    echo json_encode(["error" => "Prepare failed (check): " . $conn->error]);
+    exit();
+}
+$check->bind_param("ssss", $seat, $bus_id, $from, $to);
+$check->execute();
+$checkResult = $check->get_result();
+
+if ($checkResult->num_rows > 0) {
+    http_response_code(409);
+    echo json_encode(["error" => "Seat already booked"]);
     exit();
 }
 
-$stmt->bind_param("sssssssi", $razorpay_payment_id, $fullname, $phone, $email, $seat, $from, $to, $amount);
+// ✅ Insert
+$stmt = $conn->prepare("INSERT INTO payments (razorpay_payment_id, fullname, phone, email, seat_number, bus_id, from_location, to_location, amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+if (!$stmt) {
+    echo json_encode(["error" => "Prepare failed (insert): " . $conn->error]);
+    exit();
+}
+
+$stmt->bind_param("ssssssssd", $razorpay_id, $name, $phone, $email, $seat, $bus_id, $from, $to, $amount);
 
 if ($stmt->execute()) {
-   // ✅ Step 1: Update seat status
-    if (!empty($seat) && !empty($bus_id)) {
-       // STEP 1: Automatically update seat status to 'booked' in bus_seats
-        $bus_id = "BUS001"; // default bus ID
-        $updateSeat = $conn->prepare("UPDATE bus_seats SET status='booked' WHERE bus_id=? AND seat_number=?");
-        $updateSeat->bind_param("ss", $bus_id, $seat);
-        $updateSeat->execute();
-        echo json_encode(["message" => "Payment stored successfully and seat marked as booked"]);
-        }
-} else {
-    http_response_code(500);
     echo json_encode([
-        "message" => "Failed to store payment",
-        "error" => $stmt->error
+        "success" => true,
+        "invoice_url" => "http://localhost/finalproject/payment/invoice.php?payment_id=" . $razorpay_id
     ]);
+} else {
+    echo json_encode(["error" => "Execute failed: " . $stmt->error]);
 }
-?>
+
+$conn->close();

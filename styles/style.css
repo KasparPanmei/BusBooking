@@ -173,11 +173,15 @@ section .searchBar img
   
   .seating-chart {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr); /* 2 seats - aisle - 2 seats */
     gap: 10px;
     margin-top: 10px;
   }
   
+  .aisle {
+    background-color: transparent;
+    pointer-events: none;
+  }
   .seat {
     padding: 10px;
     text-align: center;

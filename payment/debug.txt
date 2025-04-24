@@ -1,0 +1,12 @@
+Array
+(
+    [razorpay_payment_id] => pay_QN1lDbSEtmGtBz
+    [name] => Kaspar Panmei
+    [phone] => 07982239573
+    [email] => kasparpanmei02@gmail.com
+    [seat] => 3
+    [from] => imphal
+    [to] => nungba
+    [amount] => 600
+    [busId] => BUS003
+)

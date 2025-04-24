@@ -1,16 +1,11 @@
 <!-- At the top of admin.php -->
-<button type="button" class="adminBtn">
-  <a href="logout.php" class="adminlogout bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 w-full">Logout</a>
-</button>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Admin Panel - Seat Manager</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
+    body { font-family: Arial; padding: 10px;}
     input, select, button { margin: 5px; padding: 5px; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
@@ -27,9 +22,25 @@
           text-decoration: none;
           color: white;
       }
+
+    nav
+    {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: aliceblue;
+      padding: 10px;
+    }
   </style>
 </head>
-<body>
+<body onload="time();">
+  <nav>
+    <div id="time">
+    </div>
+    <button type="button" class="adminBtn">
+      <a href="logout.php" class="adminlogout bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 w-full">Logout</a>
+    </button>
+  </nav>
   <h2>Admin Panel - Manage Seats</h2>
  
   <label>Bus ID: <input type="text" id="busId" value="BUS001"></label>
@@ -61,6 +72,7 @@
         <th>Payment ID</th>
         <th>From</th>
         <th>To</th>
+        <th>Booking Time</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -174,6 +186,7 @@
               <td>${payment.razorpay_payment_id}</td>
               <td>${payment.from_location}</td>
               <td>${payment.to_location}</td>
+              <td>${payment.created_at}</td>
               <td>
                 <button onclick="newupdatePayment(this)">Save</button>
                 <button onclick="newdeletePayment('${payment.razorpay_payment_id}')">Delete</button>
@@ -222,6 +235,14 @@
     
     newfetchPayments();
     setInterval(newfetchPayments, 1000);
+    </script>
+    <script>
+      function time()
+      {
+        const t = new Date;
+        document.getElementById('time').innerHTML = t;
+        setInterval(time,1000);
+      }
     </script>
     
 </body>
