@@ -17,7 +17,8 @@
 
 </head>
 <body>
-    <!-- Navbar -->
+    <div class="bodyBackground">
+      <!-- Navbar -->
     <nav class="navbar is-transparent">
       <div class="navbar-brand">
         <a class="navbar-item" href="./index.html">
@@ -35,6 +36,7 @@
         <div class="navbar-start">
           <a class="navbar-item is-active" href="#"> Home </a>
           <a class="navbar-item" href="#tickets"> Tickets </a>
+          <a class="navbar-item" href="#about"> About </a>
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link" href="#"> Services </a>
             <div class="navbar-dropdown is-active">
@@ -44,7 +46,7 @@
               <a class="navbar-item" href="#"> Car Rental </a>
             </div>
           </div>
-          <a class="navbar-item " href="#"> Contact </a>
+          <a class="navbar-item " href="#contact"> Contact </a>
         </div>
     
         <div class="navbar-end">
@@ -116,6 +118,7 @@
         </div>
     </section>
 
+    </div>
     <!-- payment -->
     <div class="background">
       <span></span>
@@ -138,8 +141,9 @@
       <span></span>
       <span></span>
       <span></span>
-      <section class="section" id="ticket">
+      <section class="section" id="tickets">
         <div class="container">
+          
           <h1 class="title has-text-centered" style="color: black;font-size: 40px;">Book Your Ticket 🚌 </h1>
       
           <form id="paymentForm" class="box bg-white p-4 rounded-2xl shadow-md w-full max-w-4xl" style="max-width: 500px; margin: 0 auto; color: black;">
@@ -207,7 +211,97 @@
         </div>
       </section>
    </div>
-    
+  <section id="about">
+    <div class="aboutHeading">
+      <h2>🚌 About Us</h2>
+    </div>
+    <div class="aboutTitle">
+      <p>Welcome to EasyBus, your reliable partner in smart and seamless bus travel!
+        At EasyBus, we’re redefining the way you book bus tickets. Whether you're commuting daily or planning a long trip, our goal is to provide a hassle-free, quick, and secure booking experience. With real-time seat availability, instant online payments, and easy route selection, traveling has never been this simple.</p>
+    </div>
+    <div class="gridCard">
+      <div class="card-contents">
+        <div class="image">
+          <img src="./Icons/seats.png" alt="seating">
+        </div>
+        <div class="contents">
+          <p>🪑 Real-Time Seat Tracking
+            <hr>
+            <p>View which seats are booked and which are available instantly.</p>
+          </p>
+        </div>
+      </div>
+      <div class="card-contents">
+        <div class="image">
+          <img src="./Icons/payment-method_313201.png" alt="seating">
+        </div>
+        <div class="contents">
+          <p>🔐 Secure Payments
+            <hr>
+            <p>Powered by Razorpay, your transactions are safe and fast.</p>
+          </p>
+        </div>
+      </div>
+      <div class="card-contents">
+        <div class="image">
+          <img src="./Icons/dashboard_icon_182989.png" alt="seating">
+        </div>
+        <div class="contents">
+          <p>🧑‍💼 Admin Dashboard
+            <hr>
+            <p>Our smart admin tools help manage seat bookings and payments with ease.</p>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="background-contact">
+      <img src="./Icons/toledo-skyline-monochromatic-photo-bg9pl1dmbfdbyfgy.webp" alt="">
+    </div>
+    <div class="contact-content">
+      <div class="heading">
+        <h1>Contact Us</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati incidunt iusto exercitationem nesciunt totam, non repudiandae nihil vero error ducimus.</p>
+      </div>
+    </div>
+    <div class="contactus">
+      <div class="address">
+        <div class="icons">
+          <img src="./Icons/icons8-location-50.png" alt="">
+          <div class="details">
+            <p><span>Address</span></p>
+            <p>Sangaiprou Kabui Khul</p>
+            <p>Imphal West, 795004</p>
+          </div>
+        </div>
+        <div class="icons">
+          <img src="./Icons/icons8-phone-50.png" alt="">
+          <div class="details">
+            <p><span>Phone</span></p>
+            <a href="tel:1234567890">1234567890</a>
+          </div>
+        </div>
+        <div class="icons">
+          <img src="./Icons/icons8-mail-50.png" alt="">
+          <div class="details">
+            <p><span>Mail</span></p>
+            <a href="mailto:gaithoijin@gmail.com">gaithoijin@gmail.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="form">
+        <form action="">
+          <h2>Send Message</h2>
+          <input type="text" name="" placeholder="Full Name" id="" required>
+          <input type="email" name="" placeholder="Email" id="" required>
+          <input type="text" name="" placeholder="Type Your Message" id="" required>
+          <button class="button is-primary" type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
 </body>
 <script src="./main.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -245,5 +339,23 @@ $navbarBurgers.forEach( el => {
 });
 
 });
+</script>
+<script src="three.r134.min.js"></script>
+<script src="vanta.clouds.min.js"></script>
+<script>
+VANTA.CLOUDS({
+  el: ".section",
+  mouseControls: true,
+  touchControls: true,
+  gyroControls: false,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  backgroundColor: 0xeae4e4,
+  skyColor: 0x577e90,
+  sunColor: 0xffa745,
+  sunGlareColor: 0x902805,
+  sunlightColor: 0x4c341b,
+  speed: 0.70
+})
 </script>
 </html>

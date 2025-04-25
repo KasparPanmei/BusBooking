@@ -1,12 +1,12 @@
 Array
 (
-    [razorpay_payment_id] => pay_QN1lDbSEtmGtBz
+    [razorpay_payment_id] => pay_QNMiV4zBSFzamA
     [name] => Kaspar Panmei
     [phone] => 07982239573
     [email] => kasparpanmei02@gmail.com
-    [seat] => 3
+    [seat] => 5
     [from] => imphal
-    [to] => nungba
-    [amount] => 600
-    [busId] => BUS003
+    [to] => Tamenglong
+    [amount] => 500
+    [busId] => BUS001
 )
