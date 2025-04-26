@@ -292,11 +292,12 @@
         </div>
       </div>
       <div class="form">
-        <form action="">
+        <form action="https://api.web3forms.com/submit" method="POST">
           <h2>Send Message</h2>
-          <input type="text" name="" placeholder="Full Name" id="" required>
-          <input type="email" name="" placeholder="Email" id="" required>
-          <input type="text" name="" placeholder="Type Your Message" id="" required>
+          <input type="hidden" name="access_key" value="d339154e-8db1-46a5-bd99-4d5b01f1f143">
+          <input type="text" name="fullname" placeholder="Full Name" id="" required>
+          <input type="email" name="email" placeholder="Email" id="" required>
+          <input type="text" name="message" placeholder="Type Your Message" id="" required>
           <button class="button is-primary" type="submit">Send</button>
         </form>
       </div>
